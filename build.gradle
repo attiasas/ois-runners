@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+configure(subprojects){
+    apply plugin: 'java-library'
+    compileJava {
+        options.incremental = true
+    }
+}
+
+allprojects {
+    group = 'org.ois'
+    version = "$projectVersion"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
