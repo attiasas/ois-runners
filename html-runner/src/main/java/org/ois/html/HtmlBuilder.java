@@ -18,14 +18,14 @@ public class HtmlBuilder {
     public static void main(String[] args) throws IOException {
         TeaBuildConfiguration teaBuildConfiguration = new TeaBuildConfiguration();
         String assetsDirPath = System.getenv(RunnerConfiguration.ENV_PROJECT_ASSETS_PATH);
-        teaBuildConfiguration.assetsPath.add(new AssetFileHandle(assetsDirPath == null || assetsDirPath.trim().isEmpty() ? "../../../assets" : assetsDirPath));
+        teaBuildConfiguration.assetsPath.add(new AssetFileHandle(assetsDirPath == null || assetsDirPath.trim().isEmpty() ? "../../../resources" : assetsDirPath));
         teaBuildConfiguration.webappPath = new File("build/dist").getCanonicalPath();
 
         // Register any extra classpath assets here:
         // teaBuildConfiguration.additionalAssetsClasspathFiles.add("org/ois/asset.extension");
 
         // Register any classes or packages that require reflection here:
-        // TeaReflectionSupplier.addReflectionClass("org.ois.reflect");
+         TeaReflectionSupplier.addReflectionClass("org.ois.example");
 
         TeaVMTool tool = TeaBuilder.config(teaBuildConfiguration);
         tool.setMainClass(HtmlLauncher.class.getName());
