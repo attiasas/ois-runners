@@ -8,6 +8,7 @@ import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass;
 import java.io.File;
 import java.io.IOException;
 
+import org.ois.core.project.SimulationManifest;
 import org.ois.core.runner.RunnerConfiguration;
 import org.teavm.tooling.TeaVMTool;
 import org.teavm.vm.TeaVMOptimizationLevel;
@@ -17,15 +18,17 @@ import org.teavm.vm.TeaVMOptimizationLevel;
 public class HtmlBuilder {
     public static void main(String[] args) throws IOException {
         TeaBuildConfiguration teaBuildConfiguration = new TeaBuildConfiguration();
-        String assetsDirPath = System.getenv(RunnerConfiguration.ENV_PROJECT_ASSETS_PATH);
-        teaBuildConfiguration.assetsPath.add(new AssetFileHandle(assetsDirPath == null || assetsDirPath.trim().isEmpty() ? "../../../resources" : assetsDirPath));
+        teaBuildConfiguration.assetsPath.add(new AssetFileHandle("../../../resources"));
         teaBuildConfiguration.webappPath = new File("build/dist").getCanonicalPath();
 
         // Register any extra classpath assets here:
         // teaBuildConfiguration.additionalAssetsClasspathFiles.add("org/ois/asset.extension");
 
         // Register any classes or packages that require reflection here:
+        File reflectionsFile = new File("../../../resources/" + SimulationManifest.DEFAULT_FILE_NAME);
+        System.err.println("Test file build: (exists: " + reflectionsFile.exists() + ") " + reflectionsFile.toPath());
          TeaReflectionSupplier.addReflectionClass("org.ois.example");
+        TeaReflectionSupplier.addReflectionClass("java.io.File");
 
         TeaVMTool tool = TeaBuilder.config(teaBuildConfiguration);
         tool.setMainClass(HtmlLauncher.class.getName());

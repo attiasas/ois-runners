@@ -7,10 +7,8 @@ gretty {
     contextPath = '/'
     extraResourceBase 'build/dist/webapp'
 }
-// rootProject.file('assets').path 'C:\\Users\\assaf\\OneDrive\\Documents\\code\\ois\\ois-example\\simulation' System.getenv('OIS_ENV_PROJECT_ASSETS_DIR')
 
-def assetsPath = System.getenv("OIS_PROJECT_ASSETS_PATH")
-sourceSets.main.resources.srcDirs += [ assetsPath == null || assetsPath.trim().isEmpty() ? rootProject.file('../../../resources').path : assetsPath.trim() ]
+sourceSets.main.resources.srcDirs += [ rootProject.file('../../../resources').path ]
 project.ext.mainClassName = 'org.ois.html.HtmlBuilder'
 
 // This must be at least 11, and no higher than the JDK version this project is built with.
@@ -28,8 +26,6 @@ dependencies {
     implementation "org.teavm:teavm-tooling:$teaVMVersion"
 
     implementation "org.ois:open-interactive-simulation-core:$coreVersion"
-//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
-//    implementation files("C:\\Users\\assaf\\OneDrive\\Documents\\code\\ois\\ois-example\\build\\libs\\ois-example-0.1-SNAPSHOT.jar")
 }
 
 tasks.register('buildJavaScript', JavaExec) {

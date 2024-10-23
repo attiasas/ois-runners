@@ -2,6 +2,7 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        google()
     }
 }
 
@@ -19,11 +20,12 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        google()
     }
 }
 
 subprojects {
     dependencies {
-        implementation files("C:\\Users\\assaf\\OneDrive\\Documents\\code\\ois\\ois-example\\build\\libs\\ois-example-0.1-SNAPSHOT.jar")
+        implementation fileTree(dir: "$rootDir/../../../libs", include: ['*.jar'])
     }
 }
