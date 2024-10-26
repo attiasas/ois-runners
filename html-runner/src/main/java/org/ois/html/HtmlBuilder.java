@@ -5,11 +5,17 @@ import com.github.xpenatan.gdx.backends.teavm.config.TeaBuildConfiguration;
 import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder;
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier;
 import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.ois.core.project.SimulationManifest;
-import org.ois.core.runner.RunnerConfiguration;
+import org.ois.core.utils.io.data.formats.JsonFormat;
 import org.teavm.tooling.TeaVMTool;
 import org.teavm.vm.TeaVMOptimizationLevel;
 
@@ -18,17 +24,43 @@ import org.teavm.vm.TeaVMOptimizationLevel;
 public class HtmlBuilder {
     public static void main(String[] args) throws IOException {
         TeaBuildConfiguration teaBuildConfiguration = new TeaBuildConfiguration();
-        teaBuildConfiguration.assetsPath.add(new AssetFileHandle("../../../resources"));
+
+        String assetsDirPathStr = "../../../resources";
+        Path assetsDirPath = new File(assetsDirPathStr).toPath();
+
+        teaBuildConfiguration.assetsPath.add(new AssetFileHandle(assetsDirPathStr));
         teaBuildConfiguration.webappPath = new File("build/dist").getCanonicalPath();
 
         // Register any extra classpath assets here:
         // teaBuildConfiguration.additionalAssetsClasspathFiles.add("org/ois/asset.extension");
 
-        // Register any classes or packages that require reflection here:
-        File reflectionsFile = new File("../../../resources/" + SimulationManifest.DEFAULT_FILE_NAME);
-        System.err.println("Test file build: (exists: " + reflectionsFile.exists() + ") " + reflectionsFile.toPath());
-         TeaReflectionSupplier.addReflectionClass("org.ois.example");
-        TeaReflectionSupplier.addReflectionClass("java.io.File");
+        try (InputStream manifestInputStream = Files.newInputStream(assetsDirPath.resolve(SimulationManifest.DEFAULT_FILE_NAME))) {
+            SimulationManifest manifest = JsonFormat.compact().load(new SimulationManifest(), manifestInputStream);
+
+            // Set configurations
+            teaBuildConfiguration.htmlTitle = SimulationConfig.TITLE;
+
+            // Register any classes or packages that require reflection here:
+            System.err.println("#################################################################\n" +
+                    "|\n" +
+                    "| OIS - Loading Reflections\n" +
+                    "|\n" +
+                    "#################################################################");
+            // The engine uses Reflection for States, register them.
+            Set<String> reflectionItems = new HashSet<>(manifest.getStates().values());
+            // Get custom from project
+            Path customReflectionItemsFilePath = assetsDirPath.resolve(SimulationConfig.REFLECTION_ITEMS_FILE_NAME);
+            if (customReflectionItemsFilePath.toFile().exists()) {
+                System.err.println("Loading custom reflection items from project");
+                try (InputStream refelectionInputStream = Files.newInputStream(customReflectionItemsFilePath)) {
+                    reflectionItems.addAll(Set.of(SimulationConfig.loadReflectionItems(JsonFormat.compact().load(refelectionInputStream))));
+                }
+            }
+            for (String reflectionItem : reflectionItems) {
+                System.err.println("* " + reflectionItem);
+                TeaReflectionSupplier.addReflectionClass(reflectionItem);
+            }
+        }
 
         TeaVMTool tool = TeaBuilder.config(teaBuildConfiguration);
         tool.setMainClass(HtmlLauncher.class.getName());
