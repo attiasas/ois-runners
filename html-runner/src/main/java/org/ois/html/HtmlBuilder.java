@@ -31,6 +31,10 @@ public class HtmlBuilder {
         teaBuildConfiguration.assetsPath.add(new AssetFileHandle(assetsDirPathStr));
         teaBuildConfiguration.webappPath = new File("build/dist").getCanonicalPath();
 
+        // TODO: use task buildJavaScript instead of run, replace logo data at dist dir in runner before running jettyRun
+        teaBuildConfiguration.showLoadingLogo = false;
+//        teaBuildConfiguration.logoPath = "logo.png";
+
         // Register any extra classpath assets here:
         // teaBuildConfiguration.additionalAssetsClasspathFiles.add("org/ois/asset.extension");
 
