@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+    }
+}
+
+configure(subprojects){
+    apply plugin: 'java-library'
+    compileJava {
+        options.incremental = true
+    }
+}
+
+allprojects {
+    group = 'org.ois'
+    version = "$projectVersion"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+    }
+}
+
+subprojects {
+    dependencies {
+        implementation fileTree(dir: "$rootDir/../../../libs", include: ['*.jar'])
+    }
+}
