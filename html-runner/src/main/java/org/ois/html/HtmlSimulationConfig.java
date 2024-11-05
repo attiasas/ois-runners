@@ -2,13 +2,10 @@ package org.ois.html;
 
 import org.ois.core.runner.RunnerConfiguration;
 import org.ois.core.utils.io.data.DataNode;
-import org.ois.core.utils.io.data.formats.JsonFormat;
 import org.ois.core.utils.log.ILogger;
 
-import java.util.ArrayList;
-
 // Changing File location, name and content could break the plugin that inject values to it
-public class SimulationConfig extends RunnerConfiguration {
+public class HtmlSimulationConfig extends RunnerConfiguration {
     public static final String TITLE = "OIS";
     public static final int SCREEN_WIDTH = 0;
     public static final int SCREEN_HEIGHT = 0;
@@ -18,12 +15,27 @@ public class SimulationConfig extends RunnerConfiguration {
 
     public static final String REFLECTION_ITEMS_FILE_NAME = "reflection.ois";
 
-    public SimulationConfig() {
+    public HtmlSimulationConfig() {
         super();
         setType(RunnerType.Html);
 
-        setLogLevel(ILogger.toLogLevel(LOG_LEVEL));
-        setLogTopics(LOG_TOPICS);
+        setLogLevel(getInitialLogLevel());
+        setLogTopics(getInitialLogTopic());
+    }
+
+    private static ILogger.Level getInitialLogLevel()  {
+        String logLevel = LOG_LEVEL;
+        if (System.getenv(ILogger.ENV_LOG_LEVEL) != null) {
+            logLevel = System.getenv(ILogger.ENV_LOG_LEVEL);
+        }
+        return ILogger.toLogLevel(logLevel);
+    }
+
+    private static String[] getInitialLogTopic()  {
+        if(System.getenv(ILogger.ENV_LOG_TOPICS) != null) {
+            return System.getenv(ILogger.ENV_LOG_TOPICS).split(";");
+        }
+        return LOG_TOPICS;
     }
 
     public static String[] loadReflectionItems(DataNode data) {

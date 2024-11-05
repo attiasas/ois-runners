@@ -42,7 +42,7 @@ public class HtmlBuilder {
             SimulationManifest manifest = JsonFormat.compact().load(new SimulationManifest(), manifestInputStream);
 
             // Set configurations
-            teaBuildConfiguration.htmlTitle = SimulationConfig.TITLE;
+            teaBuildConfiguration.htmlTitle = HtmlSimulationConfig.TITLE;
 
             // Register any classes or packages that require reflection here:
             System.err.println("#################################################################\n" +
@@ -53,11 +53,11 @@ public class HtmlBuilder {
             // The engine uses Reflection for States, register them.
             Set<String> reflectionItems = new HashSet<>(manifest.getStates().values());
             // Get custom from project
-            Path customReflectionItemsFilePath = assetsDirPath.resolve(SimulationConfig.REFLECTION_ITEMS_FILE_NAME);
+            Path customReflectionItemsFilePath = assetsDirPath.resolve(HtmlSimulationConfig.REFLECTION_ITEMS_FILE_NAME);
             if (customReflectionItemsFilePath.toFile().exists()) {
                 System.err.println("Loading custom reflection items from project");
                 try (InputStream refelectionInputStream = Files.newInputStream(customReflectionItemsFilePath)) {
-                    reflectionItems.addAll(Set.of(SimulationConfig.loadReflectionItems(JsonFormat.compact().load(refelectionInputStream))));
+                    reflectionItems.addAll(Set.of(HtmlSimulationConfig.loadReflectionItems(JsonFormat.compact().load(refelectionInputStream))));
                 }
             }
             for (String reflectionItem : reflectionItems) {

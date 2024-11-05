@@ -13,7 +13,7 @@ public class HtmlLauncher {
         new TeaApplication(new SimulationEngine(convertToRunnerConfigAndSetParams(config)), config);
     }
 
-    public static SimulationConfig convertToRunnerConfigAndSetParams(TeaApplicationConfiguration configuration) {
+    public static HtmlSimulationConfig convertToRunnerConfigAndSetParams(TeaApplicationConfiguration configuration) {
         //// If width and height are each greater than 0, then the app will use a fixed size.
         //configuration.width = 640;
         //configuration.height = 480;
@@ -21,9 +21,9 @@ public class HtmlLauncher {
         //configuration.width = 0;
         //configuration.height = 0;
         //// If width and height are both -1, then the app will fill the canvas size.
-        configuration.width = SimulationConfig.SCREEN_WIDTH;
-        configuration.height = SimulationConfig.SCREEN_HEIGHT;
+        configuration.width = HtmlSimulationConfig.SCREEN_WIDTH;
+        configuration.height = HtmlSimulationConfig.SCREEN_HEIGHT;
 
-        return new SimulationConfig();
+        return new HtmlSimulationConfig();
     }
 }
