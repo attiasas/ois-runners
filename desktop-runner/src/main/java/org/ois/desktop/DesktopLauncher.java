@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import org.ois.core.project.SimulationManifest;
 import org.ois.core.runner.RunnerConfiguration;
 import org.ois.core.runner.SimulationEngine;
-import org.ois.core.utils.io.data.formats.JsonFormat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +22,7 @@ public class DesktopLauncher {
 
     public static RunnerConfiguration convertToRunnerConfigAndSetParams(Lwjgl3ApplicationConfiguration configuration) throws IOException {
         try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(SimulationManifest.DEFAULT_FILE_NAME)) {
-            RunnerConfiguration runnerConfig = RunnerConfiguration.getRunnerConfigurations(in);
-
-            runnerConfig.setType(RunnerConfiguration.RunnerType.Desktop);
+            RunnerConfiguration runnerConfig = DesktopSimulationConfig.getDesktopSimulationConfig(in);
 
             configuration.setTitle(runnerConfig.getSimulationManifest().getTitle());
             //// Vsync limits the frames per second to what your hardware can display, and helps eliminate
@@ -44,7 +41,7 @@ public class DesktopLauncher {
                 );
             }
             //// You can change these files; they are in lwjgl3/src/main/resources/ .
-//            configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
+            configuration.setWindowIcon( "icons/icon128.png", "icons/icon32.png");
 
             return runnerConfig;
         }
