@@ -4,28 +4,34 @@ buildscript {
         mavenCentral()
         google()
     }
-}
-
-configure(subprojects){
-    apply plugin: 'java-library'
-    compileJava {
-        options.incremental = true
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.2.2"
     }
 }
 
 allprojects {
-    group = 'org.ois'
+    group = System.getenv("OIS_PROJECT_GROUP") != null ? System.getenv("OIS_PROJECT_GROUP") :'org.ois'
     version = "$projectVersion"
+}
+
+configure(subprojects - project('android-runner')) {
+    apply plugin: 'java-library'
+    compileJava {
+        options.incremental = true
+    }
+
+    dependencies {
+        implementation fileTree(dir: "$rootDir/../../../libs", include: ['*.jar'])
+    }
+}
+
+subprojects {
+    ext.oisProjectTitle = System.getenv("OIS_PROJECT_TITLE") != null ? System.getenv("OIS_PROJECT_TITLE") : "OIS-PROJECT"
+    ext.oisProjectVersion = System.getenv("OIS_PROJECT_VERSION") != null ? System.getenv("OIS_PROJECT_VERSION") : "$projectVersion"
 
     repositories {
         mavenLocal()
         mavenCentral()
         google()
-    }
-}
-
-subprojects {
-    dependencies {
-        implementation fileTree(dir: "$rootDir/../../../libs", include: ['*.jar'])
     }
 }
