@@ -98,7 +98,7 @@ tasks.matching { it.name.contains("merge") && it.name.contains("JniLibFolders") 
 
 tasks.register('runAndroid', Exec) {
   // ANDROID_HOME env var is needed for 'runAndroid' and 'export' task
-  def path = "$System.env.ANDROID_SDK_ROOT"
+  def path = "$System.env.ANDROID_HOME"
   def adb = path + "/platform-tools/adb"
   commandLine "$adb", 'shell', 'am', 'start', '-n', 'org.ois/org.ois.android.AndroidLauncher'
 }
