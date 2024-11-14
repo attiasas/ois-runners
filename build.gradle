@@ -10,7 +10,7 @@ buildscript {
 }
 
 allprojects {
-    group = 'org.ois'
+    group = System.getenv("OIS_PROJECT_GROUP") != null ? System.getenv("OIS_PROJECT_GROUP") :'org.ois'
     version = "$projectVersion"
 }
 
@@ -26,7 +26,9 @@ configure(subprojects - project('android-runner')) {
 }
 
 subprojects {
-    ext.appName = 'DevOIS'
+    ext.oisProjectTitle = System.getenv("OIS_PROJECT_TITLE") != null ? System.getenv("OIS_PROJECT_TITLE") : "OIS-PROJECT"
+    ext.oisProjectVersion = System.getenv("OIS_PROJECT_VERSION") != null ? System.getenv("OIS_PROJECT_VERSION") : "$projectVersion"
+
     repositories {
         mavenLocal()
         mavenCentral()
