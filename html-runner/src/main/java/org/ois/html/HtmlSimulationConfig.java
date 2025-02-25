@@ -13,6 +13,8 @@ public class HtmlSimulationConfig extends RunnerConfiguration {
     public static final String LOG_LEVEL = "info";
     public static final String[] LOG_TOPICS = new String[]{};
 
+    public static final boolean DEBUG_MODE = false;
+
     public static final String REFLECTION_ITEMS_FILE_NAME = "reflection.ois";
 
     public HtmlSimulationConfig() {
@@ -21,6 +23,8 @@ public class HtmlSimulationConfig extends RunnerConfiguration {
 
         setLogLevel(getInitialLogLevel());
         setLogTopics(getInitialLogTopic());
+
+        setDebugMode(DEBUG_MODE);
     }
 
     private static ILogger.Level getInitialLogLevel()  {
