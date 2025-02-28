@@ -23,7 +23,6 @@ public class DesktopLauncher {
     public static RunnerConfiguration convertToRunnerConfigAndSetParams(Lwjgl3ApplicationConfiguration configuration) throws IOException {
         try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(SimulationManifest.DEFAULT_FILE_NAME)) {
             RunnerConfiguration runnerConfig = DesktopSimulationConfig.getDesktopSimulationConfig(in);
-
             configuration.setTitle(runnerConfig.getSimulationManifest().getTitle());
 
             if (!runnerConfig.getDebugMode()) {
@@ -36,6 +35,8 @@ public class DesktopLauncher {
                 //// If you remove the above line and set Vsync to false, you can get unlimited FPS, which can be
                 //// useful for testing performance, but can also be very stressful to some hardware.
                 //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
+            } else {
+                configuration.useVsync(false);
             }
             if (runnerConfig.getSimulationManifest().getScreenWidth() > 0 || runnerConfig.getSimulationManifest().getScreenHeight() > 0) {
                 configuration.setWindowedMode(
