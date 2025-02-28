@@ -14,12 +14,18 @@ public class DesktopSimulationConfig extends RunnerConfiguration {
     public static final String LOG_LEVEL = "info";
     public static final String[] LOG_TOPICS = new String[]{};
 
+    public static final boolean DEBUG_MODE = false;
+    public static final String DEV_MODE_DIR = "";
+
     public DesktopSimulationConfig() {
         super();
         setType(RunnerType.Desktop);
 
         setLogLevel(getInitialLogLevel());
         setLogTopics(getInitialLogTopic());
+
+        setDebugMode(DEBUG_MODE);
+        setDevModeDir(DEV_MODE_DIR);
     }
 
     private static ILogger.Level getInitialLogLevel()  {

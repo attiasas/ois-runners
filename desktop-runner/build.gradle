@@ -25,7 +25,6 @@ def os = System.properties['os.name'].toLowerCase()
 run {
     workingDir = rootProject.file('../../resources').path
     setIgnoreExitValue(true)
-
     if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
 }
 
@@ -58,6 +57,9 @@ tasks.register("prepareForRuntime", Copy) {
 }
 jpackageImage.dependsOn prepareForRuntime
 
+def devModeDir = System.getProperty("org.ois.runner.devModeDir", "").trim()
+def debugMode = System.getProperty("org.ois.runner.debugMode", "").trim().toLowerCase() == "true"
+
 runtime {
     options = ['--strip-debug',
                '--compress', '2',
@@ -74,11 +76,20 @@ runtime {
         version = oisProjectVersion
         mainJar = jar.archiveFileName.get()
         if (os.contains('windows')) {
-            // '--win-console' : will open cmd with logs when app running
             imageOptions = [
                     "--icon", file("../../../resources/icons/icon128.ico"),
-                    "--name", oisProjectTitle
+                    "--name", oisProjectTitle,
+//                    "-splash:splash.png"
             ]
+            if (devModeDir || debugMode) {
+                if (debugMode) {
+                    println "Debug mode is ENABLED"
+                }
+                if (devModeDir) {
+                    println "Dev Mode Directory: ${devModeDir}"
+                }
+                imageOptions += "--win-console"
+            }
         } else if (os.contains('linux')) {
             imageOptions = [
                     "--icon", file("../../../resources/icons/icon128.png"),

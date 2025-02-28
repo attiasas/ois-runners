@@ -14,12 +14,16 @@ public class AndroidSimulationConfig extends RunnerConfiguration {
     public static final String LOG_LEVEL = "info";
     public static final String[] LOG_TOPICS = new String[]{};
 
+    public static final boolean DEBUG_MODE = false;
+
     public AndroidSimulationConfig() {
         super();
         setType(RunnerType.Android);
 
         setLogLevel(getInitialLogLevel());
         setLogTopics(getInitialLogTopic());
+
+        setDebugMode(DEBUG_MODE);
     }
 
     private static ILogger.Level getInitialLogLevel()  {
